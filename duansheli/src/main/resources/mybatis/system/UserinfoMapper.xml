@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.userinfo.mapper.UserinfoMapper">
+    
+    <resultMap type="Userinfo" id="UserinfoResult">
+        <result property="openid"    column="openid"    />
+        <result property="nickName"    column="nickName"    />
+        <result property="avatarUrl"    column="avatarUrl"    />
+        <result property="gender"    column="gender"    />
+        <result property="jifen"    column="jifen"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="userid"    column="userid"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectUserinfoVo">
+        select openid, nickName, avatarUrl, gender, jifen, province, city, userid, create_time from userinfo
+    </sql>
+
+    <select id="selectUserinfoList" parameterType="Userinfo" resultMap="UserinfoResult">
+        <include refid="selectUserinfoVo"/>
+        <where>  
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="nickName != null  and nickName != ''"> and nickName like concat('%', #{nickName}, '%')</if>
+            <if test="avatarUrl != null  and avatarUrl != ''"> and avatarUrl = #{avatarUrl}</if>
+            <if test="gender != null "> and gender = #{gender}</if>
+            <if test="jifen != null "> and jifen = #{jifen}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="userid != null "> and userid = #{userid}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectUserinfoByOpenid" parameterType="String" resultMap="UserinfoResult">
+        <include refid="selectUserinfoVo"/>
+        where openid = #{openid}
+    </select>
+        
+    <insert id="insertUserinfo" parameterType="Userinfo">
+        insert into userinfo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null">openid,</if>
+            <if test="nickName != null and nickName != ''">nickName,</if>
+            <if test="avatarUrl != null and avatarUrl != ''">avatarUrl,</if>
+            <if test="gender != null">gender,</if>
+            <if test="jifen != null">jifen,</if>
+            <if test="province != null">province,</if>
+            <if test="city != null">city,</if>
+            <if test="userid != null">userid,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null">#{openid},</if>
+            <if test="nickName != null and nickName != ''">#{nickName},</if>
+            <if test="avatarUrl != null and avatarUrl != ''">#{avatarUrl},</if>
+            <if test="gender != null">#{gender},</if>
+            <if test="jifen != null">#{jifen},</if>
+            <if test="province != null">#{province},</if>
+            <if test="city != null">#{city},</if>
+            <if test="userid != null">#{userid},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserinfo" parameterType="Userinfo">
+        update userinfo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickName != null and nickName != ''">nickName = #{nickName},</if>
+            <if test="avatarUrl != null and avatarUrl != ''">avatarUrl = #{avatarUrl},</if>
+            <if test="gender != null">gender = #{gender},</if>
+            <if test="jifen != null">jifen = #{jifen},</if>
+            <if test="province != null">province = #{province},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="userid != null">userid = #{userid},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where openid = #{openid}
+    </update>
+
+    <delete id="deleteUserinfoByOpenid" parameterType="String">
+        delete from userinfo where openid = #{openid}
+    </delete>
+
+    <delete id="deleteUserinfoByOpenids" parameterType="String">
+        delete from userinfo where openid in 
+        <foreach item="openid" collection="array" open="(" separator="," close=")">
+            #{openid}
+        </foreach>
+    </delete>
+
+</mapper>

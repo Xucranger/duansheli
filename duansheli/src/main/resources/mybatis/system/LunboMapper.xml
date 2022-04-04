@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.lunbo.mapper.LunboMapper">
+    
+    <resultMap type="Lunbo" id="LunboResult">
+        <result property="id"    column="id"    />
+        <result property="pic"    column="pic"    />
+        <result property="nav"    column="nav"    />
+        <result property="comm"    column="comm"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectLunboVo">
+        select id, pic, nav, comm, create_time from lunbo
+    </sql>
+
+    <select id="selectLunboList" parameterType="Lunbo" resultMap="LunboResult">
+        <include refid="selectLunboVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="pic != null  and pic != ''"> and pic = #{pic}</if>
+            <if test="nav != null  and nav != ''"> and nav = #{nav}</if>
+            <if test="comm != null  and comm != ''"> and comm = #{comm}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectLunboById" parameterType="Long" resultMap="LunboResult">
+        <include refid="selectLunboVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertLunbo" parameterType="Lunbo" useGeneratedKeys="true" keyProperty="id">
+        insert into lunbo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="pic != null">pic,</if>
+            <if test="nav != null">nav,</if>
+            <if test="comm != null">comm,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="pic != null">#{pic},</if>
+            <if test="nav != null">#{nav},</if>
+            <if test="comm != null">#{comm},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLunbo" parameterType="Lunbo">
+        update lunbo
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="pic != null">pic = #{pic},</if>
+            <if test="nav != null">nav = #{nav},</if>
+            <if test="comm != null">comm = #{comm},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteLunboById" parameterType="Long">
+        delete from lunbo where id = #{id}
+    </delete>
+
+    <delete id="deleteLunboByIds" parameterType="String">
+        delete from lunbo where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

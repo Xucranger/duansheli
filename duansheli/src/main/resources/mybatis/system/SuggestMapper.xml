@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.suggest.mapper.SuggestMapper">
+    
+    <resultMap type="Suggest" id="SuggestResult">
+        <result property="openid"    column="openid"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="avatar"    column="avatar"    />
+        <result property="suggest"    column="suggest"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectSuggestVo">
+        select openid, nickname, avatar, suggest, create_time from suggest
+    </sql>
+
+    <select id="selectSuggestList" parameterType="Suggest" resultMap="SuggestResult">
+        <include refid="selectSuggestVo"/>
+        <where>  
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="nickname != null  and nickname != ''"> and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="avatar != null  and avatar != ''"> and avatar = #{avatar}</if>
+            <if test="suggest != null  and suggest != ''"> and suggest = #{suggest}</if>
+        </where>
+    </select>
+    
+    <select id="selectSuggestByOpenid" parameterType="String" resultMap="SuggestResult">
+        <include refid="selectSuggestVo"/>
+        where openid = #{openid}
+    </select>
+        
+    <insert id="insertSuggest" parameterType="Suggest">
+        insert into suggest
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">openid,</if>
+            <if test="nickname != null">nickname,</if>
+            <if test="avatar != null">avatar,</if>
+            <if test="suggest != null">suggest,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">#{openid},</if>
+            <if test="nickname != null">#{nickname},</if>
+            <if test="avatar != null">#{avatar},</if>
+            <if test="suggest != null">#{suggest},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSuggest" parameterType="Suggest">
+        update suggest
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nickname != null">nickname = #{nickname},</if>
+            <if test="avatar != null">avatar = #{avatar},</if>
+            <if test="suggest != null">suggest = #{suggest},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where openid = #{openid}
+    </update>
+
+    <delete id="deleteSuggestByOpenid" parameterType="String">
+        delete from suggest where openid = #{openid}
+    </delete>
+
+    <delete id="deleteSuggestByOpenids" parameterType="String">
+        delete from suggest where openid in 
+        <foreach item="openid" collection="array" open="(" separator="," close=")">
+            #{openid}
+        </foreach>
+    </delete>
+
+</mapper>

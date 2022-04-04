@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('地址列表列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>：</label>
+                                <input type="text" name="locid"/>
+                            </li>
+                            <li>
+                                <label>openid：</label>
+                                <input type="text" name="openid"/>
+                            </li>
+                            <li>
+                                <label>收货人：</label>
+                                <input type="text" name="name"/>
+                            </li>
+                            <li>
+                                <label>电话：</label>
+                                <input type="text" name="phone"/>
+                            </li>
+                            <li>
+                                <label>详细地址：</label>
+                                <input type="text" name="addressDetail"/>
+                            </li>
+                            <li>
+                                <label>地址：</label>
+                                <input type="text" name="address"/>
+                            </li>
+                            <li>
+                                <label>默认，1正确：</label>
+                                <input type="text" name="isDefault"/>
+                            </li>
+                            <li>
+                                <label>经度：</label>
+                                <input type="text" name="latitude"/>
+                            </li>
+                            <li>
+                                <label>纬度：</label>
+                                <input type="text" name="longitude"/>
+                            </li>
+                            <li>
+                                <label>省份：</label>
+                                <input type="text" name="province"/>
+                            </li>
+                            <li>
+                                <label>城市：</label>
+                                <input type="text" name="city"/>
+                            </li>
+                            <li>
+                                <label>街道：</label>
+                                <input type="text" name="district"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:location:add">
+                    <i class="fa fa-plus"></i> 添加
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:location:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:location:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:location:export">
+                    <i class="fa fa-download"></i> 导出
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:location:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:location:remove')}]];
+        var prefix = ctx + "system/location";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+                exportUrl: prefix + "/export",
+                modalName: "地址列表",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field: 'locid',
+                    title: '',
+                    visible: false
+                },
+                {
+                    field: 'openid',
+                    title: 'openid'
+                },
+                {
+                    field: 'name',
+                    title: '收货人'
+                },
+                {
+                    field: 'phone',
+                    title: '电话'
+                },
+                {
+                    field: 'addressDetail',
+                    title: '详细地址'
+                },
+                {
+                    field: 'address',
+                    title: '地址'
+                },
+                {
+                    field: 'isDefault',
+                    title: '默认，1正确'
+                },
+                {
+                    field: 'latitude',
+                    title: '经度'
+                },
+                {
+                    field: 'longitude',
+                    title: '纬度'
+                },
+                {
+                    field: 'province',
+                    title: '省份'
+                },
+                {
+                    field: 'city',
+                    title: '城市'
+                },
+                {
+                    field: 'district',
+                    title: '街道'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.locid + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.locid + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

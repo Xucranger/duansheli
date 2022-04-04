@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.jifenplus.mapper.JifenplusMapper">
+    
+    <resultMap type="Jifenplus" id="JifenplusResult">
+        <result property="id"    column="id"    />
+        <result property="openid"    column="openid"    />
+        <result property="techid"    column="techid"    />
+        <result property="deviceId"    column="deviceId"    />
+        <result property="kind"    column="kind"    />
+        <result property="weight"    column="weight"    />
+        <result property="jifen"    column="jifen"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectJifenplusVo">
+        select id, openid, techid, deviceId, kind, weight, jifen, create_time from jifenplus
+    </sql>
+
+    <select id="selectJifenplusList" parameterType="Jifenplus" resultMap="JifenplusResult">
+        <include refid="selectJifenplusVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="techid != null  and techid != ''"> and techid = #{techid}</if>
+            <if test="deviceId != null  and deviceId != ''"> and deviceId = #{deviceId}</if>
+            <if test="kind != null "> and kind = #{kind}</if>
+            <if test="weight != null  and weight != ''"> and weight = #{weight}</if>
+            <if test="jifen != null "> and jifen = #{jifen}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectJifenplusById" parameterType="Long" resultMap="JifenplusResult">
+        <include refid="selectJifenplusVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJifenplus" parameterType="Jifenplus" useGeneratedKeys="true" keyProperty="id">
+        insert into jifenplus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">openid,</if>
+            <if test="techid != null and techid != ''">techid,</if>
+            <if test="deviceId != null and deviceId != ''">deviceId,</if>
+            <if test="kind != null">kind,</if>
+            <if test="weight != null and weight != ''">weight,</if>
+            <if test="jifen != null">jifen,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">#{openid},</if>
+            <if test="techid != null and techid != ''">#{techid},</if>
+            <if test="deviceId != null and deviceId != ''">#{deviceId},</if>
+            <if test="kind != null">#{kind},</if>
+            <if test="weight != null and weight != ''">#{weight},</if>
+            <if test="jifen != null">#{jifen},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJifenplus" parameterType="Jifenplus">
+        update jifenplus
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="openid != null and openid != ''">openid = #{openid},</if>
+            <if test="techid != null and techid != ''">techid = #{techid},</if>
+            <if test="deviceId != null and deviceId != ''">deviceId = #{deviceId},</if>
+            <if test="kind != null">kind = #{kind},</if>
+            <if test="weight != null and weight != ''">weight = #{weight},</if>
+            <if test="jifen != null">jifen = #{jifen},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJifenplusById" parameterType="Long">
+        delete from jifenplus where id = #{id}
+    </delete>
+
+    <delete id="deleteJifenplusByIds" parameterType="String">
+        delete from jifenplus where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.location.mapper.LocationMapper">
+    
+    <resultMap type="Location" id="LocationResult">
+        <result property="locid"    column="locid"    />
+        <result property="openid"    column="openid"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="addressDetail"    column="address_detail"    />
+        <result property="address"    column="address"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="latitude"    column="latitude"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="district"    column="district"    />
+    </resultMap>
+
+    <sql id="selectLocationVo">
+        select locid, openid, name, phone, address_detail, address, is_default, latitude, longitude, province, city, district from location
+    </sql>
+
+    <select id="selectLocationList" parameterType="Location" resultMap="LocationResult">
+        <include refid="selectLocationVo"/>
+        <where>  
+            <if test="locid != null "> and locid = #{locid}</if>
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="addressDetail != null  and addressDetail != ''"> and address_detail = #{addressDetail}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="isDefault != null "> and is_default = #{isDefault}</if>
+            <if test="latitude != null  and latitude != ''"> and latitude = #{latitude}</if>
+            <if test="longitude != null  and longitude != ''"> and longitude = #{longitude}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="district != null  and district != ''"> and district = #{district}</if>
+        </where>
+    </select>
+    
+    <select id="selectLocationByLocid" parameterType="Long" resultMap="LocationResult">
+        <include refid="selectLocationVo"/>
+        where locid = #{locid}
+    </select>
+        
+    <insert id="insertLocation" parameterType="Location" useGeneratedKeys="true" keyProperty="locid">
+        insert into location
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">openid,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="addressDetail != null">address_detail,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="latitude != null and latitude != ''">latitude,</if>
+            <if test="longitude != null and longitude != ''">longitude,</if>
+            <if test="province != null and province != ''">province,</if>
+            <if test="city != null and city != ''">city,</if>
+            <if test="district != null and district != ''">district,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">#{openid},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="addressDetail != null">#{addressDetail},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="latitude != null and latitude != ''">#{latitude},</if>
+            <if test="longitude != null and longitude != ''">#{longitude},</if>
+            <if test="province != null and province != ''">#{province},</if>
+            <if test="city != null and city != ''">#{city},</if>
+            <if test="district != null and district != ''">#{district},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLocation" parameterType="Location">
+        update location
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="openid != null and openid != ''">openid = #{openid},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="addressDetail != null">address_detail = #{addressDetail},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="latitude != null and latitude != ''">latitude = #{latitude},</if>
+            <if test="longitude != null and longitude != ''">longitude = #{longitude},</if>
+            <if test="province != null and province != ''">province = #{province},</if>
+            <if test="city != null and city != ''">city = #{city},</if>
+            <if test="district != null and district != ''">district = #{district},</if>
+        </trim>
+        where locid = #{locid}
+    </update>
+
+    <delete id="deleteLocationByLocid" parameterType="Long">
+        delete from location where locid = #{locid}
+    </delete>
+
+    <delete id="deleteLocationByLocids" parameterType="String">
+        delete from location where locid in 
+        <foreach item="locid" collection="array" open="(" separator="," close=")">
+            #{locid}
+        </foreach>
+    </delete>
+
+</mapper>

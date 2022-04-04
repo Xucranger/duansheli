@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.jifenminus.mapper.JifenminusMapper">
+    
+    <resultMap type="Jifenminus" id="JifenminusResult">
+        <result property="id"    column="id"    />
+        <result property="openid"    column="openid"    />
+        <result property="name"    column="name"    />
+        <result property="phone"    column="phone"    />
+        <result property="address"    column="address"    />
+        <result property="addressDetail"    column="address_detail"    />
+        <result property="jifen"    column="jifen"    />
+        <result property="shopid"    column="shopid"    />
+        <result property="shopnum"    column="shopnum"    />
+        <result property="shopname"    column="shopname"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectJifenminusVo">
+        select id, openid, name, phone, address, address_detail, jifen, shopid, shopnum, shopname, create_time from jifenminus
+    </sql>
+
+    <select id="selectJifenminusList" parameterType="Jifenminus" resultMap="JifenminusResult">
+        <include refid="selectJifenminusVo"/>
+        <where>  
+            <if test="openid != null  and openid != ''"> and openid = #{openid}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="addressDetail != null  and addressDetail != ''"> and address_detail = #{addressDetail}</if>
+            <if test="jifen != null "> and jifen = #{jifen}</if>
+            <if test="shopid != null "> and shopid = #{shopid}</if>
+            <if test="shopnum != null "> and shopnum = #{shopnum}</if>
+            <if test="shopname != null  and shopname != ''"> and shopname like concat('%', #{shopname}, '%')</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectJifenminusById" parameterType="Long" resultMap="JifenminusResult">
+        <include refid="selectJifenminusVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJifenminus" parameterType="Jifenminus" useGeneratedKeys="true" keyProperty="id">
+        insert into jifenminus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">openid,</if>
+            <if test="name != null">name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="address != null">address,</if>
+            <if test="addressDetail != null">address_detail,</if>
+            <if test="jifen != null">jifen,</if>
+            <if test="shopid != null">shopid,</if>
+            <if test="shopnum != null">shopnum,</if>
+            <if test="shopname != null">shopname,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openid != null and openid != ''">#{openid},</if>
+            <if test="name != null">#{name},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="address != null">#{address},</if>
+            <if test="addressDetail != null">#{addressDetail},</if>
+            <if test="jifen != null">#{jifen},</if>
+            <if test="shopid != null">#{shopid},</if>
+            <if test="shopnum != null">#{shopnum},</if>
+            <if test="shopname != null">#{shopname},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJifenminus" parameterType="Jifenminus">
+        update jifenminus
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="openid != null and openid != ''">openid = #{openid},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="addressDetail != null">address_detail = #{addressDetail},</if>
+            <if test="jifen != null">jifen = #{jifen},</if>
+            <if test="shopid != null">shopid = #{shopid},</if>
+            <if test="shopnum != null">shopnum = #{shopnum},</if>
+            <if test="shopname != null">shopname = #{shopname},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJifenminusById" parameterType="Long">
+        delete from jifenminus where id = #{id}
+    </delete>
+
+    <delete id="deleteJifenminusByIds" parameterType="String">
+        delete from jifenminus where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
